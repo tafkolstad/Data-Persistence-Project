@@ -24,8 +24,6 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HighScoreText = GameObject.Find("HighScoreText").GetComponent<Text>();
-
         if(DataManager.Instance.highScore > 0){
             UpdateHighScoreText();
         }
@@ -92,6 +90,8 @@ public class MainManager : MonoBehaviour
     }
 
     void UpdateHighScoreText(){
+        HighScoreText = GameObject.Find("HighScoreText").GetComponent<Text>();
+        
         string bestPlayerName = DataManager.Instance.bestPlayerName;
         int highScore = DataManager.Instance.highScore;
 
