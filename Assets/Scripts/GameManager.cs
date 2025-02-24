@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
         if(DataManager.Instance.highScore > 0){
             highScoreText = GameObject.Find("HighScoreText").GetComponent<TMP_Text>();
             highScoreText.text = $"Best Score: {DataManager.Instance.bestPlayerName} : {DataManager.Instance.highScore}";
-
         }
 
         startButton.onClick.AddListener(StartGame);
@@ -29,7 +28,6 @@ public class GameManager : MonoBehaviour
     }
 
     void StartGame(){
-        Debug.Log(inputField.text);
         DataManager.Instance.playerName = inputField.text;
 
         SceneManager.LoadScene("main");
