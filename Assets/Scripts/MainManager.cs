@@ -14,6 +14,7 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public Text HighScoreText;
     public GameObject GameOverText;
+    public Button HighScoreButton;
     
     private bool m_Started = false;
     private int m_Points;
@@ -27,6 +28,8 @@ public class MainManager : MonoBehaviour
         if(DataManager.Instance.highScore > 0){
             UpdateHighScoreText();
         }
+
+        HighScoreButton.onClick.AddListener(GoToHighScores);
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -87,14 +90,19 @@ public class MainManager : MonoBehaviour
 
         m_GameOver = true;
         GameOverText.SetActive(true);
+        HighScoreButton.gameObject.SetActive(true);
     }
 
     void UpdateHighScoreText(){
         HighScoreText = GameObject.Find("HighScoreText").GetComponent<Text>();
-        
+
         string bestPlayerName = DataManager.Instance.bestPlayerName;
         int highScore = DataManager.Instance.highScore;
 
         HighScoreText.text = $"Best Score: {bestPlayerName} : {highScore}";
+    }
+
+    void GoToHighScores(){
+        SceneManager.LoadScene("highScore");
     }
 }
