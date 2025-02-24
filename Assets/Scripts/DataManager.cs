@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-    public string bestPlayerName;
-    public string playerName;
-    public int highScore;
+    public string currentPlayerName;
+    public List<int> highScores;
+    public List<string> bestPlayerNames;
 
     void Awake()
     {
@@ -25,14 +26,14 @@ public class DataManager : MonoBehaviour
 
     [System.Serializable]
     class SaveData{
-        public string bestPlayerName;
-        public int highScore;
+        public List<string> bestPlayerNames;
+        public List<int> highScores;
     }
 
     public void SaveGame(){
         SaveData data = new();
-        data.bestPlayerName = bestPlayerName;
-        data.highScore = highScore;
+        data.bestPlayerNames = bestPlayerNames;
+        data.highScores = highScores;
 
         string json = JsonUtility.ToJson(data);
 
@@ -46,8 +47,8 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            bestPlayerName = data.bestPlayerName;
-            highScore = data.highScore;
+            bestPlayerNames = data.bestPlayerNames;
+            highScores = data.highScores;
         }
 
     }

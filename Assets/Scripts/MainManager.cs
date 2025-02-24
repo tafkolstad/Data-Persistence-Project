@@ -21,11 +21,13 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
+    private int maxHighScores = 8;
+
     
     // Start is called before the first frame update
     void Start()
     {
-        if(DataManager.Instance.highScore > 0){
+        if(DataManager.Instance.highScores.Count > 0){
             UpdateHighScoreText();
         }
 
@@ -79,14 +81,39 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        if(m_Points > DataManager.Instance.highScore){
-            DataManager.Instance.highScore = m_Points;
-            DataManager.Instance.bestPlayerName = DataManager.Instance.playerName;
+        List<int> highScores = DataManager.Instance.highScores;
 
-            UpdateHighScoreText();
+        if(highScores.Count == 0){
+            DataManager.Instance.highScores.Add(m_Points);
+            DataManager.Instance.bestPlayerNames.Add(DataManager.Instance.currentPlayerName);
+        } else if(highScores.Count < maxHighScores){
+            for (int i = 0; i < highScores.Count; i++)
+            {
+                if(m_Points > highScores[i]){
+                    DataManager.Instance.highScores.Insert(i, m_Points);
+                    DataManager.Instance.bestPlayerNames.Insert(i, DataManager.Instance.currentPlayerName);
 
-            DataManager.Instance.SaveGame();
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; i < highScores.Count; i++)
+            {
+                if(m_Points > highScores[i]){
+                    DataManager.Instance.highScores.RemoveAt(maxHighScores - 1);
+                    DataManager.Instance.bestPlayerNames.RemoveAt(maxHighScores - 1);
+
+                    DataManager.Instance.highScores.Insert(i, m_Points);
+                    DataManager.Instance.bestPlayerNames.Insert(i, DataManager.Instance.currentPlayerName);
+
+                    break;
+                }
+            }
         }
+
+        UpdateHighScoreText();
+
+        DataManager.Instance.SaveGame();
 
         m_GameOver = true;
         GameOverText.SetActive(true);
@@ -96,8 +123,8 @@ public class MainManager : MonoBehaviour
     void UpdateHighScoreText(){
         HighScoreText = GameObject.Find("HighScoreText").GetComponent<Text>();
 
-        string bestPlayerName = DataManager.Instance.bestPlayerName;
-        int highScore = DataManager.Instance.highScore;
+        string bestPlayerName = DataManager.Instance.bestPlayerNames[0];
+        int highScore = DataManager.Instance.highScores[0];
 
         HighScoreText.text = $"Best Score: {bestPlayerName} : {highScore}";
     }

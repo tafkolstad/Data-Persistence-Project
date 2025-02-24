@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,8 +18,15 @@ public class HighScoreManager : MonoBehaviour
         menuButton = GameObject.Find("MenuButton").GetComponent<Button>();
         gameButton = GameObject.Find("GameButton").GetComponent<Button>();
 
-        if(DataManager.Instance.highScore > 0){
-            highScores.text = $"Name Score\n{DataManager.Instance.bestPlayerName} {DataManager.Instance.highScore}";
+        highScores.text = "Name Score\n";
+
+
+        if(DataManager.Instance.highScores.Count > 0){
+            for (int i = 0; i < DataManager.Instance.highScores.Count; i++)
+            {
+                Debug.Log($"Highscore: {DataManager.Instance.highScores[i]}");
+                highScores.text += $"{DataManager.Instance.bestPlayerNames[i]} {DataManager.Instance.highScores[i]}\n";
+            }
         }
 
         menuButton.onClick.AddListener(GoToMenu);
